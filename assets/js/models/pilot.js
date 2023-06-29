@@ -14,12 +14,14 @@ class Pilot {
     this.vy = 0;
     this.ax = PILOT_AX;
 
+    this.pilotStar = true;
+
     this.sprite = new Image();
-    this.sprite.src = "/assets/img/pilot.png";
+    this.sprite.src = "/assets/img/pilotStart.png";
     this.sprite.verticalFrames = 1;
     this.sprite.verticalFrameIndex = 0;
-    this.sprite.horizFrames = 2;
-    this.sprite.horizFrameIndex = 0;
+    this.sprite.horizFrames = 3;
+    this.sprite.horizFrameIndex = this.pilotStar ? 0 : 1;
 
     this.sprite.onload = () => {
       this.sprite.isReady = true;
@@ -30,15 +32,16 @@ class Pilot {
         this.sprite.height / this.sprite.verticalFrames
       );
     };
+
     this.animationTick = 0;
   }
   onKeyDown(event) {
     switch (event.keyCode) {
       case KEY_UP:
-        this.y = this.y - PILOT_UPDOWN;
+        this.y = !this.pilotStar ? this.y - PILOT_UPDOWN : this.y;
         break;
       case KEY_DOWN:
-        this.y = this.y + PILOT_UPDOWN;
+        this.y = !this.pilotStar ? this.y + PILOT_UPDOWN : this.y;
         break;
       case KEY_LEFT:
         this.vx = -PILOT_SPEED;
@@ -61,38 +64,58 @@ class Pilot {
     }
   }
 
+  starRace() {
+    setTimeout(() => {
+      this.pilotStar = false;
+    }, TIME_START);
+  }
+
   move() {
-    this.x += this.vx;
-    this.y += this.vy;
+    // ! The pilot can move
+    if (!this.pilotStar) {
+      this.x += this.vx;
+      this.y += this.vy;
 
-    if (this.x < 0) {
-      this.x = 0;
-    } else if (this.x + this.w > this.ctx.canvas.width) {
-      this.x = this.ctx.canvas.width - this.w;
-    }
+      if (this.x < 0) {
+        this.x = 0;
+      } else if (this.x + this.w > this.ctx.canvas.width) {
+        this.x = this.ctx.canvas.width - this.w;
+      }
 
-    if (this.y < 0) {
-      this.y = 0;
-    } else if (this.y + this.h > this.ctx.canvas.height) {
-      this.y = this.ctx.canvas.height - this.h;
-    }
-    // - Limits
-    // Limit right
-    if (this.x >= this.ctx.canvas.width - LIMIT_RIGHT) {
-      this.x = this.ctx.canvas.width - LIMIT_RIGHT;
-    }
-    // Up
-    if (this.y > this.y0) {
-      this.y = this.y0;
-    }
-    // Down
-    if (this.y < 145) {
-      this.y = this.y + PILOT_UPDOWN;
-    }
-    // Sky Limit
-    if (this.y < 0) {
-      this.y = 0;
-      this.vy = 0;
+      if (this.y < 0) {
+        this.y = 0;
+      } else if (this.y + this.h > this.ctx.canvas.height) {
+        this.y = this.ctx.canvas.height - this.h;
+      }
+      // - Limits
+      // Limit right
+      if (this.x >= this.ctx.canvas.width - LIMIT_RIGHT) {
+        this.x = this.ctx.canvas.width - LIMIT_RIGHT;
+      }
+      // Up
+      if (this.y > this.y0) {
+        this.y = this.y0;
+      }
+      // Down
+      if (this.y < 105) {
+        this.y = this.y + PILOT_UPDOWN;
+      }
+      // Sky Limit
+      if (this.y < 0) {
+        this.y = 0;
+        this.vy = 0;
+      }
+    } else {
+      // ! The pilot can NOT move
+      // - Limits
+      // Up
+      if (this.y > this.y0) {
+        this.y = this.y0;
+      }
+      // Down
+      if (this.y < 145) {
+        this.y = this.y + PILOT_UPDOWN;
+      }
     }
   }
 
@@ -115,11 +138,11 @@ class Pilot {
 
   animate() {
     this.animationTick += 1;
-    if (this.animationTick > PILOT_RUN_ANIMATION) {
+    if (!this.pilotStar && this.animationTick > PILOT_RUN_ANIMATION) {
       this.animationTick = 0;
       this.sprite.horizFrameIndex += 1;
       if (this.sprite.horizFrameIndex > this.sprite.horizFrames - 1) {
-        this.sprite.horizFrameIndex = 0;
+        this.sprite.horizFrameIndex = this.pilotStar ? 0 : 1;
       }
     }
   }

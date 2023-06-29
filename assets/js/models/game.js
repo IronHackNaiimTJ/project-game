@@ -7,10 +7,13 @@ class Game {
     this.fps = 60;
 
     this.backgound = new Background(this.ctx);
-    this.pilot = new Pilot(this.ctx, 10, this.canvas.height - 155)
+    this.backgoundStart = new BackgroundStart(this.ctx);
+    this.downConsole = new DownConsole(this.ctx);
+    this.pilot = new Pilot(this.ctx, 10, this.canvas.height - 235)
     this.audio = new Audio('/assets/audio/motorRun.mp3')
-    this.audio.volume = 0.1
+    // this.audio.volume = 0.1
   }
+    
   onKeyDown(event) {
     this.pilot.onKeyDown(event);
   }
@@ -18,10 +21,13 @@ class Game {
   onKeyUp(event) {
     this.pilot.onKeyUp(event);
   }
+
   start() {
-    if (!this.drawIntervalId) {
+    setTimeout(() => {
       // this.audio.play()
-      this.drawIntervalId = setInterval(() => {
+    }, TIME_START);
+    if (!this.drawIntervalId) {
+        this.drawIntervalId = setInterval(() => {
         this.clear();
         this.move();
         this.draw();
@@ -40,12 +46,15 @@ class Game {
   }
 
   move() {
-    this.backgound.move();
+    this.backgoundStart.move();
+    this.pilot.starRace();
     this.pilot.move();
   }
 
   draw() {
-    this.backgound.draw();
+    //this.backgound.draw();
+    this.backgoundStart.draw();
+    this.downConsole.draw();
     this.pilot.draw();
   }
 }
