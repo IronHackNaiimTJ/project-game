@@ -12,6 +12,7 @@ class Pilot {
 
     this.vx = 0;
     this.vy = 0;
+    this.ay = PILOT_AY;
     this.ax = PILOT_AX;
 
     this.pilotStar = true;
@@ -33,25 +34,32 @@ class Pilot {
       );
     };
 
+    this.isJump = false;
+    this.isSlow = false;
+
     this.animationTick = 0;
   }
   onKeyDown(event) {
-    switch (event.keyCode) {
-      case KEY_UP:
-        this.y = !this.pilotStar ? this.y - PILOT_UPDOWN : this.y;
-        break;
-      case KEY_DOWN:
-        this.y = !this.pilotStar ? this.y + PILOT_UPDOWN : this.y;
-        break;
-      case KEY_LEFT:
-        this.vx = -PILOT_SPEED;
-        break;
-      case KEY_RIGHT:
-        this.vx = PILOT_SPEED;
-        break;
+    if (!this.isJump) {
+      switch (event.keyCode) {
+        case KEY_UP:
+          if (this.y0 > 125)
+            this.y0 = !this.pilotStar ? this.y - PILOT_UPDOWN : this.y;
+          break;
+        case KEY_DOWN:
+          if (this.y0 < 215)
+            this.y0 = !this.pilotStar ? this.y + PILOT_UPDOWN : this.y;
+          break;
+        case KEY_LEFT:
+          this.vx = -PILOT_SPEED;
+          break;
+        case KEY_RIGHT:
+          this.vx = PILOT_SPEED;
+          break;
 
-      default:
-        break;
+        default:
+          break;
+      }
     }
   }
 
@@ -73,8 +81,19 @@ class Pilot {
   move() {
     // ! The pilot can move
     if (!this.pilotStar) {
+      this.vy += this.ay;
       this.x += this.vx;
       this.y += this.vy;
+
+      //FIJO EL SUELO
+      if (this.y > this.y0) {
+        this.vy = 0;
+        this.y = this.y0;
+        if (this.isJump) {
+          this.vx = -1;
+        }
+        this.isJump = false;
+      }
 
       if (this.x < 0) {
         this.x = 0;
@@ -82,39 +101,25 @@ class Pilot {
         this.x = this.ctx.canvas.width - this.w;
       }
 
-      if (this.y < 0) {
-        this.y = 0;
-      } else if (this.y + this.h > this.ctx.canvas.height) {
-        this.y = this.ctx.canvas.height - this.h;
+      if (this.isSlow) {
+        this.isSlow;
       }
+
       // - Limits
       // Limit right
       if (this.x >= this.ctx.canvas.width - LIMIT_RIGHT) {
         this.x = this.ctx.canvas.width - LIMIT_RIGHT;
-      }
-      // Up
-      if (this.y > this.y0) {
-        this.y = this.y0;
-      }
-      // Down
-      if (this.y < 105) {
-        this.y = this.y + PILOT_UPDOWN;
-      }
-      // Sky Limit
-      if (this.y < 0) {
-        this.y = 0;
-        this.vy = 0;
-      }
+      } //   // Sky Limit
     } else {
-      // ! The pilot can NOT move
-      // - Limits
-      // Up
+      //   // ! The pilot can NOT move
+      //   // - Limits
+      //   // Up
       if (this.y > this.y0) {
         this.y = this.y0;
       }
-      // Down
+      //   // Down
       if (this.y < 145) {
-        this.y = this.y + PILOT_UPDOWN;
+        this.y0 = this.y + PILOT_UPDOWN;
       }
     }
   }
@@ -145,5 +150,24 @@ class Pilot {
         this.sprite.horizFrameIndex = this.pilotStar ? 0 : 1;
       }
     }
+  }
+
+  jump() {
+    this.vy = -PILOT_JUMP;
+    this.vx = 1;
+    // this.jumpSound.play()
+  }
+
+  jumping() {
+    this.isJump = true;
+  }
+
+  slow() {
+    this.vx = - 1;
+    // this.badFloorSound.play()
+  }
+
+  slowing() {
+    this.isSlow = true;
   }
 }

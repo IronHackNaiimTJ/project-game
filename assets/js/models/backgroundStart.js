@@ -35,18 +35,17 @@ class BackgroundStart {
   }
 
   draw() {
-    if (this.tickImage < 230) {
+    if (this.tickImage < 220) {
       this.tickImage++;
     }
-    console.log(this.tickImage);
     switch (true) {
-      case this.tickImage < 100:
+      case this.tickImage < 120:
         this.sprite.src = this.spriteStart.firstImage;
         break;
-      case this.tickImage < 190:
+      case this.tickImage < 180:
         this.sprite.src = this.spriteStart.secondtImage;
         break;
-      case this.tickImage < 220:
+      case this.tickImage < 200:
         this.sprite.src = this.spriteStart.thirdImage;
         break;
       default:
