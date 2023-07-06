@@ -11,6 +11,8 @@ class Game {
     this.pilot = new Pilot(this.ctx, 5, this.canvas.height - 235);
     this.platforms = [];
     this.badFloors = [];
+    this.badFloorsPlataform = false;
+    this.badFloorsDown = false;
     this.audio = new Audio("/assets/audio/motorRun.mp3");
     this.tickPlatform = 0;
     this.tickBadFloor = 0;
@@ -46,9 +48,25 @@ class Game {
 
         this.clearBadFloors();
         this.badFloors.forEach((platform) => this.checkBadFloor(platform));
-        if (this.tickBadFloor > TIME_BADFLOOR) {
-          this.addBadFloor();
+        if (this.tickPlatform === 260 && !this.badFloorsPlataform) {
+          this.addBadFloor(180);
+          this.addBadFloor(210);
+          this.badFloorsPlataform = true;
+        } else if (this.tickPlatform === 260 && this.badFloorsPlataform) {
+          this.addBadFloor(240);
+          this.addBadFloor(270);
+          this.badFloorsPlataform = false;
+        }
+        if (this.tickBadFloor > TIME_BADFLOOR && !this.badFloorsDown) {
+          this.addBadFloor(180);
+          this.addBadFloor(210);
           this.tickBadFloor = 0;
+          this.badFloorsDown = true;
+        } else if (this.tickBadFloor > TIME_BADFLOOR && this.badFloorsDown) {
+          this.addBadFloor(240);
+          this.addBadFloor(270);
+          this.tickBadFloor = 0;
+          this.badFloorsDown = false;
         }
 
         this.tickBadFloor++;
@@ -67,13 +85,10 @@ class Game {
   }
 
   checkPlatform(platform) {
-    const p = this.pilot;
-    const pl = platform;
-    const colx = p.x + p.w >= pl.x && p.x < pl.x + pl.w;
-    const coly = p.y + p.h >= p.y0 && p.y < pl.y + pl.h;
-    if (colx && coly) {
-      this.pilot.jumping();
-      this.pilot.jump();
+    const p = this.pilot.colideWith(platform, false);
+    if (p) {
+      this.pilot.slowing();
+      this.pilot.slow(4);
     }
   }
 
@@ -86,18 +101,16 @@ class Game {
   }
 
   checkBadFloor(badFloor) {
-    const p = this.pilot;
-    const f = badFloor;
-    const colx = p.x + p.w >= f.x && p.x < f.x + f.w;
-    const coly = p.y + p.h >= f.y && p.y < f.y + f.h;
-    if (colx && coly) {
+    const p = this.pilot.colideWith(badFloor, true);
+    // console.log(p);
+    if (p) {
       this.pilot.slowing();
-      this.pilot.slow();
+      this.pilot.slow(1);
     }
   }
 
-  addBadFloor() {
-    this.badFloors.push(new BadFloor(this.ctx, 10, this.canvas.height - 180));
+  addBadFloor(lane) {
+    this.badFloors.push(new BadFloor(this.ctx, 0, this.canvas.height - lane));
   }
 
   clearBadFloors() {

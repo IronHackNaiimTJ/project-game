@@ -56,7 +56,10 @@ class Pilot {
         case KEY_RIGHT:
           this.vx = PILOT_SPEED;
           break;
-
+        case KEY_SPACE:
+          this.jumping();
+          this.jump();
+          break;
         default:
           break;
       }
@@ -92,9 +95,17 @@ class Pilot {
         if (this.isJump) {
           this.vx = -1;
         }
+        // if (this.y0 >= 125 && this.y0 <= 215) {
         this.isJump = false;
+        // }
       }
 
+      if (this.y0 > 215) {
+        this.y = this.y0 = 215;
+      }
+      if (this.y0 < 125) {
+        this.y = this.y0 = 125;
+      }
       if (this.x < 0) {
         this.x = 0;
       } else if (this.x + this.w > this.ctx.canvas.width) {
@@ -111,13 +122,13 @@ class Pilot {
         this.x = this.ctx.canvas.width - LIMIT_RIGHT;
       } //   // Sky Limit
     } else {
-      //   // ! The pilot can NOT move
-      //   // - Limits
-      //   // Up
+      // ! The pilot can NOT move
+      // - Limits
+      // Up
       if (this.y > this.y0) {
         this.y = this.y0;
       }
-      //   // Down
+      // Down
       if (this.y < 145) {
         this.y0 = this.y + PILOT_UPDOWN;
       }
@@ -162,12 +173,37 @@ class Pilot {
     this.isJump = true;
   }
 
-  slow() {
-    this.vx = - 1;
+  slow(num) {
+    console.log(this.vx);
+    this.vx = -num;
     // this.badFloorSound.play()
   }
 
   slowing() {
     this.isSlow = true;
+  }
+
+  colideWith(element, smallElement) {
+    if (smallElement) {
+      if (
+        this.x + this.w > element.x &&
+        this.x < element.x + element.w &&
+        this.y + this.h > element.y &&
+        this.y < element.y + element.h
+      ) {
+        if (element.y0 < 240) {
+          return this.y0 < 185;
+        } else {
+          return true;
+        }
+      }
+    } else if (!smallElement) {
+      return (
+        this.x + this.w > element.x &&
+        this.x < element.x + element.w &&
+        this.y + this.h > element.y &&
+        this.y < element.y + element.h
+      );
+    }
   }
 }
