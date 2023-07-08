@@ -1,4 +1,4 @@
-class BadFloor {
+class Coin {
   constructor(ctx, x, y) {
     this.ctx = ctx;
 
@@ -7,18 +7,18 @@ class BadFloor {
 
     this.x = this.ctx.canvas.width;
     this.y = y;
-    this.w = 65;
-    this.h = 20;
+    this.w = 60;
+    this.h = 60;
 
     this.vx = BACKGROUND_SPEED;
     this.vy = 0;
     this.ay = PLATFORM_AY;
 
     this.sprite = new Image();
-    this.sprite.src = "/assets/img/badFloor.png";
+    this.sprite.src = "/assets/img/coins.png";
     this.sprite.verticalFrames = 1;
     this.sprite.verticalFrameIndex = 0;
-    this.sprite.horizFrames = 1;
+    this.sprite.horizFrames = 7;
     this.sprite.horizFrameIndex = 0;
 
     this.sprite.onload = () => {
@@ -55,16 +55,13 @@ class BadFloor {
   move() {
     if (this.tickImage > FPS_STARTGAME) {
       this.x += this.vx;
-      setTimeout(() => {
-        this.x = BACKGROUND_SPEED_NEXTLEVEL;
-      }, TIME_NEXTLEVEL);
     }
   }
 
   animate() {
     this.animationTick += 1;
 
-    if (this.animationTick > PLATFORM_RUN_ANIMATION) {
+    if (this.animationTick > COIN_RUN_ANIMATION) {
       this.animationTick = 0;
       this.sprite.horizFrameIndex += 1;
       if (this.sprite.horizFrameIndex > this.sprite.horizFrames - 1) {
@@ -75,5 +72,9 @@ class BadFloor {
 
   isVisible() {
     return this.x + this.w > 0;
+  }
+
+  isVisiblePoint() {
+    return this.x === 600;
   }
 }

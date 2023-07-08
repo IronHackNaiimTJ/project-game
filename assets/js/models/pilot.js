@@ -34,8 +34,27 @@ class Pilot {
       );
     };
 
+    this.isCrash = false
+    this.spriteFloor = new Image();
+    this.spriteFloor.src = "/assets/img/pilotFloor.png";
+    this.spriteFloor.verticalFrames = 1;
+    this.spriteFloor.verticalFrameIndex = 0;
+    this.spriteFloor.horizFrames = 4;
+    this.spriteFloor.horizFrameIndex = 0;
+
+    this.spriteFloor.onload = () => {
+      this.spriteFloor.isReady = true;
+      this.spriteFloor.frameWidth = Math.floor(
+        this.spriteFloor.width / this.spriteFloor.horizFrames
+      );
+      this.spriteFloor.frameHeight = Math.floor(
+        this.spriteFloor.height / this.spriteFloor.verticalFrames
+      );
+    };
+
     this.isJump = false;
     this.isSlow = false;
+    this.isJumpFreze = false;
 
     this.animationTick = 0;
   }
@@ -57,8 +76,12 @@ class Pilot {
           this.vx = PILOT_SPEED;
           break;
         case KEY_SPACE:
-          this.jumping();
-          this.jump();
+          if (!this.isJumpFreze) {
+            setTimeout(() => (this.isJumpFreze = false), 3000);
+            this.isJumpFreze = true;
+            this.jump();
+          }
+
           break;
         default:
           break;
@@ -95,9 +118,7 @@ class Pilot {
         if (this.isJump) {
           this.vx = -1;
         }
-        // if (this.y0 >= 125 && this.y0 <= 215) {
         this.isJump = false;
-        // }
       }
 
       if (this.y0 > 215) {
@@ -136,7 +157,7 @@ class Pilot {
   }
 
   draw() {
-    if (this.sprite.isReady) {
+    if (this.sprite.isReady && !this.isCrash) {
       this.ctx.drawImage(
         this.sprite,
         this.sprite.horizFrameIndex * this.sprite.frameWidth,
@@ -149,7 +170,27 @@ class Pilot {
         this.h
       );
       this.animate();
+    } else if (this.isCrash) {
+      this.ctx.drawImage(
+        this.spriteFloor,
+        this.spriteFloor.horizFrameIndex * this.spriteFloor.frameWidth,
+        this.spriteFloor.verticalFrameIndex * this.spriteFloor.frameHeight,
+        this.spriteFloor.frameWidth,
+        this.spriteFloor.frameHeight,
+        this.x,
+        this.y,
+        this.w,
+        this.h
+      );
+      this.animate();
     }
+  }
+
+  crash() {
+    this.isCrash = true
+    setTimeout(() => {
+      this.isCrash = false
+    }, 1000);
   }
 
   animate() {
@@ -166,15 +207,15 @@ class Pilot {
   jump() {
     this.vy = -PILOT_JUMP;
     this.vx = 1;
+    this.isJump = true;
     // this.jumpSound.play()
   }
 
-  jumping() {
-    this.isJump = true;
+  jumpStatus() {
+    return this.isJumpFreze
   }
 
   slow(num) {
-    console.log(this.vx);
     this.vx = -num;
     // this.badFloorSound.play()
   }
