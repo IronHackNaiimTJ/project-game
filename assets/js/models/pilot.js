@@ -34,7 +34,7 @@ class Pilot {
       );
     };
 
-    this.isCrash = false
+    this.isCrash = false;
     this.spriteFloor = new Image();
     this.spriteFloor.src = "/assets/img/pilotFloor.png";
     this.spriteFloor.verticalFrames = 1;
@@ -52,11 +52,32 @@ class Pilot {
       );
     };
 
+    this.isPilotMud = false;
+    this.spriteMud = new Image();
+    this.spriteMud.src = "/assets/img/pilotMud.png";
+    this.spriteMud.verticalFrames = 1;
+    this.spriteMud.verticalFrameIndex = 0;
+    this.spriteMud.horizFrames = 1;
+    this.spriteMud.horizFrameIndex = 0;
+
+    this.spriteMud.onload = () => {
+      this.spriteMud.isReady = true;
+      this.spriteMud.frameWidth = Math.floor(
+        this.spriteMud.width / this.spriteMud.horizFrames
+      );
+      this.spriteMud.frameHeight = Math.floor(
+        this.spriteMud.height / this.spriteMud.verticalFrames
+      );
+    };
+
     this.isJump = false;
     this.isSlow = false;
     this.isJumpFreze = false;
 
     this.animationTick = 0;
+
+    this.audioStart = new Audio("/assets/audio/star.mp3");
+    this.audioStart.volume = 0.1;
   }
   onKeyDown(event) {
     if (!this.isJump) {
@@ -99,6 +120,11 @@ class Pilot {
   }
 
   starRace() {
+    if (this.pilotStar) {
+      setTimeout(() => {
+        this.audioStart.play();
+      }, 490);
+    }
     setTimeout(() => {
       this.pilotStar = false;
     }, TIME_START);
@@ -132,16 +158,11 @@ class Pilot {
       } else if (this.x + this.w > this.ctx.canvas.width) {
         this.x = this.ctx.canvas.width - this.w;
       }
-
-      if (this.isSlow) {
-        this.isSlow;
-      }
-
       // - Limits
       // Limit right
       if (this.x >= this.ctx.canvas.width - LIMIT_RIGHT) {
         this.x = this.ctx.canvas.width - LIMIT_RIGHT;
-      } //   // Sky Limit
+      }
     } else {
       // ! The pilot can NOT move
       // - Limits
@@ -157,7 +178,7 @@ class Pilot {
   }
 
   draw() {
-    if (this.sprite.isReady && !this.isCrash) {
+    if (this.sprite.isReady && !this.isCrash && !this.isPilotMud) {
       this.ctx.drawImage(
         this.sprite,
         this.sprite.horizFrameIndex * this.sprite.frameWidth,
@@ -183,13 +204,33 @@ class Pilot {
         this.h
       );
       this.animate();
+    } else if (this.isPilotMud) {
+      this.ctx.drawImage(
+        this.spriteMud,
+        this.spriteMud.horizFrameIndex * this.spriteMud.frameWidth,
+        this.spriteMud.verticalFrameIndex * this.spriteMud.frameHeight,
+        this.spriteMud.frameWidth,
+        this.spriteMud.frameHeight,
+        this.x,
+        this.y,
+        this.w,
+        this.h
+      );
+      this.animate();
     }
   }
 
   crash() {
-    this.isCrash = true
+    this.isCrash = true;
     setTimeout(() => {
-      this.isCrash = false
+      this.isCrash = false;
+    }, 1000);
+  }
+
+  mud() {
+    this.isPilotMud = true;
+    setTimeout(() => {
+      this.isPilotMud = false;
     }, 1000);
   }
 
@@ -212,7 +253,7 @@ class Pilot {
   }
 
   jumpStatus() {
-    return this.isJumpFreze
+    return this.isJumpFreze;
   }
 
   slow(num) {
@@ -233,8 +274,10 @@ class Pilot {
         this.y < element.y + element.h
       ) {
         if (element.y0 < 240) {
+          this.isPilotMud = this.y0 < 185;
           return this.y0 < 185;
         } else {
+          this.isPilotMud = true;
           return true;
         }
       }

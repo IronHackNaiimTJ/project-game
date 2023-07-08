@@ -12,7 +12,6 @@ class Coin {
 
     this.vx = BACKGROUND_SPEED;
     this.vy = 0;
-    this.ay = PLATFORM_AY;
 
     this.sprite = new Image();
     this.sprite.src = "/assets/img/coins.png";

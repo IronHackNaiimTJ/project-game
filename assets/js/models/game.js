@@ -17,13 +17,22 @@ class Game {
     this.badFloorsDown = false;
     this.coins = [];
     this.point = 0;
-    this.nitro = [];
-    this.lifes = 6;
+    // this.nitro = [];
+    this.numLifes = 3;
     this.audio = new Audio("/assets/audio/motorRun.mp3");
     this.tickPlatform = 0;
     this.tickBadFloor = 0;
     this.tickCoin = 0;
-    // this.audio.volume = 0.1
+    this.audio.volume = 0.1
+  }
+
+
+  madeSpeedUp() {
+    this.backgoundStart.vx -= 5
+    this.pilot.vx -= 5
+    this.platforms.map((i) => i.vx -= 5)
+    this.coins.map((i) => i.vx -= 5)
+    this.badFloors.map((i) => i.vx -= 5)
   }
 
   onKeyDown(event) {
@@ -36,9 +45,11 @@ class Game {
 
   start() {
     this.addPlatform();
+
     setTimeout(() => {
-      // this.audio.play()
+      // this.audio.play();
     }, TIME_START);
+
     if (!this.drawIntervalId) {
       this.drawIntervalId = setInterval(() => {
         this.clear();
@@ -99,16 +110,16 @@ class Game {
   }
   // . PLATAFORMS
   checkPlatform(platform) {
-    const p = this.pilot.colideWith(platform, false);
-    if (p) {
+    if (this.pilot.colideWith(platform, false)) {
       this.pilot.slowing();
       this.pilot.slow(4);
-      this.pilot.crash()
+      this.pilot.crash();
     }
   }
 
   addPlatform() {
     this.platforms.push(new Platform(this.ctx, 200, this.canvas.height - 320));
+    // this.madeSpeedUp()
   }
 
   clearPlatforms() {
@@ -116,11 +127,10 @@ class Game {
   }
   // . BAD FLOORS
   checkBadFloor(badFloor) {
-    const p = this.pilot.colideWith(badFloor, true);
-    // console.log(p);
-    if (p) {
+    if (this.pilot.colideWith(badFloor, true)) {
       this.pilot.slowing();
       this.pilot.slow(1);
+      this.pilot.mud()
     }
   }
 
@@ -134,8 +144,7 @@ class Game {
 
   // . COINS
   checkCoin(coin) {
-    const p = this.pilot.colideWith(coin, false);
-    if (p) {
+    if (this.pilot.colideWith(coin, false)) {
       this.points();
     }
   }
@@ -146,6 +155,11 @@ class Game {
 
   clearCoins() {
     this.coins = this.coins.filter((coin) => coin.isVisible());
+  }
+
+  // . LIFES
+  addLife() {
+    this.lifes.push(new Life(this.ctx));
   }
 
   move() {
@@ -160,6 +174,7 @@ class Game {
   draw() {
     this.backgoundStart.draw();
     this.downConsole.draw();
+    this.lifes.draw()
     this.pointDraw.draw(this.point);
     this.jumpStatus.draw(this.pilot.jumpStatus());
     this.badFloors.forEach((badFloor) => badFloor.draw());

@@ -27,11 +27,9 @@ class BackgroundStart {
 
   move() {
     setTimeout(() => {
-      this.x += BACKGROUND_SPEED;
+      this.x += this.vx;
     }, TIME_START);
-    // setTimeout(() => {
-    //   this.x += BACKGROUND_SPEED;
-    // }, TIME_NEXTLEVEL);
+
     if (this.x < -this.w) {
       this.x = 0;
     }
