@@ -123,7 +123,7 @@ class Pilot {
     if (this.pilotStar) {
       setTimeout(() => {
         this.audioStart.play();
-      }, 490);
+      }, 800);
     }
     setTimeout(() => {
       this.pilotStar = false;

@@ -17,26 +17,26 @@ class Game {
     this.badFloorsDown = false;
     this.coins = [];
     this.point = 0;
-    // this.nitro = [];
-    this.numLifes = 3;
     this.audio = new Audio("/assets/audio/motorRun.mp3");
     this.tickPlatform = 0;
     this.tickBadFloor = 0;
+    this.life = new Life(this.ctx);
+    this.lifes = [this.life, this.life, this.life];
+    this.lifesDeleted = false;
     this.tickCoin = 0;
-    this.audio.volume = 0.1
+    this.audio.volume = 0.1;
   }
 
-
   madeSpeedUp() {
-    this.backgoundStart.vx -= 5
-    this.pilot.vx -= 5
-    this.platforms.map((i) => i.vx -= 5)
-    this.coins.map((i) => i.vx -= 5)
-    this.badFloors.map((i) => i.vx -= 5)
+    this.backgoundStart.vx -= 5;
+    this.pilot.vx -= 5;
+    this.platforms.map((i) => (i.vx -= 5));
+    this.coins.map((i) => (i.vx -= 5));
+    this.badFloors.map((i) => (i.vx -= 5));
   }
 
   onKeyDown(event) {
-    this.pilot.onKeyDown(event);
+    this.pilot.onKeyDown(event, 3000);
   }
 
   onKeyUp(event) {
@@ -114,12 +114,12 @@ class Game {
       this.pilot.slowing();
       this.pilot.slow(4);
       this.pilot.crash();
+      this.deleteLife();
     }
   }
 
   addPlatform() {
     this.platforms.push(new Platform(this.ctx, 200, this.canvas.height - 320));
-    // this.madeSpeedUp()
   }
 
   clearPlatforms() {
@@ -130,7 +130,7 @@ class Game {
     if (this.pilot.colideWith(badFloor, true)) {
       this.pilot.slowing();
       this.pilot.slow(1);
-      this.pilot.mud()
+      this.pilot.mud();
     }
   }
 
@@ -158,8 +158,14 @@ class Game {
   }
 
   // . LIFES
-  addLife() {
-    this.lifes.push(new Life(this.ctx));
+  deleteLife() {
+    if (!this.lifesDeleted) {
+      this.lifes.pop();
+      this.lifesDeleted = true;
+      setTimeout(() => {
+        this.lifesDeleted = false;
+      }, 4000);
+    }
   }
 
   move() {
@@ -174,7 +180,7 @@ class Game {
   draw() {
     this.backgoundStart.draw();
     this.downConsole.draw();
-    this.lifes.draw()
+    this.lifes.forEach((life, index) => life.draw(index));
     this.pointDraw.draw(this.point);
     this.jumpStatus.draw(this.pilot.jumpStatus());
     this.badFloors.forEach((badFloor) => badFloor.draw());
@@ -186,5 +192,8 @@ class Game {
   points() {
     this.point += 1;
     this.coins = this.coins.filter((coin) => coin.isVisiblePoint());
+    if (this.point > 5) {
+      this.madeSpeedUp();
+    }
   }
 }
