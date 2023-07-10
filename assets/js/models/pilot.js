@@ -77,9 +77,17 @@ class Pilot {
     this.animationTick = 0;
 
     this.audioStart = new Audio("/assets/audio/star.mp3");
-    this.audioStart.volume = 0.1;
+    this.audioStart.volume = 0.5;
+    this.audioMud = new Audio("/assets/audio/mud.mp3");
+    this.audioMud.volume = 0.5;
+    this.audioPlatform = new Audio("/assets/audio/platform.mp3");
+    this.audioPlatform.volume = 0.5;
+    this.audioMotorStart = new Audio("/assets/audio/motor1.mp3");
+    this.audioMotorStart.volume = 0.1;    
+    this.audioMotorRun = new Audio("/assets/audio/motorRun.mp3");
+    this.audioMotorRun.volume = 0.1;
   }
-  onKeyDown(event) {
+  onKeyDown(event, timeJump) {
     if (!this.isJump) {
       switch (event.keyCode) {
         case KEY_UP:
@@ -98,7 +106,7 @@ class Pilot {
           break;
         case KEY_SPACE:
           if (!this.isJumpFreze) {
-            setTimeout(() => (this.isJumpFreze = false), 3000);
+            setTimeout(() => (this.isJumpFreze = false), timeJump);
             this.isJumpFreze = true;
             this.jump();
           }
@@ -133,10 +141,11 @@ class Pilot {
   move() {
     // ! The pilot can move
     if (!this.pilotStar) {
+      // this.audioMotorStart.pause()
+      this.audioMotorRun.play()
       this.vy += this.ay;
       this.x += this.vx;
       this.y += this.vy;
-
       //FIJO EL SUELO
       if (this.y > this.y0) {
         this.vy = 0;
@@ -165,6 +174,7 @@ class Pilot {
       }
     } else {
       // ! The pilot can NOT move
+      // this.audioMotorStart.play()
       // - Limits
       // Up
       if (this.y > this.y0) {
@@ -222,6 +232,7 @@ class Pilot {
 
   crash() {
     this.isCrash = true;
+    this.audioPlatform.play();
     setTimeout(() => {
       this.isCrash = false;
     }, 1000);
@@ -229,6 +240,7 @@ class Pilot {
 
   mud() {
     this.isPilotMud = true;
+    this.audioMud.play();
     setTimeout(() => {
       this.isPilotMud = false;
     }, 1000);

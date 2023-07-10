@@ -55,9 +55,6 @@ class BadFloor {
   move() {
     if (this.tickImage > FPS_STARTGAME) {
       this.x += this.vx;
-      setTimeout(() => {
-        this.x = BACKGROUND_SPEED_NEXTLEVEL;
-      }, TIME_NEXTLEVEL);
     }
   }
 

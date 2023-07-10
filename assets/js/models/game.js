@@ -9,6 +9,7 @@ class Game {
     this.backgoundStart = new BackgroundStart(this.ctx);
     this.downConsole = new DownConsole(this.ctx);
     this.pointDraw = new Point(this.ctx, 262, this.canvas.height - 56);
+    this.timeDraw = new TimeGame(this.ctx, 462, this.canvas.height - 56);
     this.jumpStatus = new JumpStatus(this.ctx, 70, this.canvas.height - 20);
     this.pilot = new Pilot(this.ctx, 5, this.canvas.height - 235);
     this.platforms = [];
@@ -17,26 +18,32 @@ class Game {
     this.badFloorsDown = false;
     this.coins = [];
     this.point = 0;
-    this.audio = new Audio("/assets/audio/motorRun.mp3");
+    this.audio = new Audio("/assets/audio/motor1.mp3");
+    this.audioCoin = new Audio("/assets/audio/coin.mp3");
     this.tickPlatform = 0;
     this.tickBadFloor = 0;
     this.life = new Life(this.ctx);
     this.lifes = [this.life, this.life, this.life];
     this.lifesDeleted = false;
     this.tickCoin = 0;
-    this.audio.volume = 0.1;
+    this.audio.volume = 0.5;
+    this.audioCoin.volume = 0.5;
   }
 
   madeSpeedUp() {
-    this.backgoundStart.vx -= 5;
-    this.pilot.vx -= 5;
-    this.platforms.map((i) => (i.vx -= 5));
-    this.coins.map((i) => (i.vx -= 5));
-    this.badFloors.map((i) => (i.vx -= 5));
+    this.backgoundStart.vx -= BACKGROUND_SPEED_NEXTLEVEL;
+    this.pilot.vx -= BACKGROUND_SPEED_NEXTLEVEL;
+    this.platforms.map((i) => (i.vx -= BACKGROUND_SPEED_NEXTLEVEL));
+    this.coins.map((i) => (i.vx -= BACKGROUND_SPEED_NEXTLEVEL));
+    this.badFloors.map((i) => (i.vx -= BACKGROUND_SPEED_NEXTLEVEL));
   }
 
   onKeyDown(event) {
-    this.pilot.onKeyDown(event, 3000);
+    if (this.point > 5) {
+      this.pilot.onKeyDown(event, 1500);
+    } else {
+      this.pilot.onKeyDown(event, 3000);
+    }
   }
 
   onKeyUp(event) {
@@ -45,9 +52,8 @@ class Game {
 
   start() {
     this.addPlatform();
-
     setTimeout(() => {
-      // this.audio.play();
+      this.audio.play();
     }, TIME_START);
 
     if (!this.drawIntervalId) {
@@ -159,12 +165,14 @@ class Game {
 
   // . LIFES
   deleteLife() {
-    if (!this.lifesDeleted) {
+    if (!this.lifesDeleted && this.lifes.length > 0) {
       this.lifes.pop();
       this.lifesDeleted = true;
       setTimeout(() => {
         this.lifesDeleted = false;
       }, 4000);
+    } else if (this.lifes.length === 0) {
+      this.gameOver();
     }
   }
 
@@ -182,6 +190,7 @@ class Game {
     this.downConsole.draw();
     this.lifes.forEach((life, index) => life.draw(index));
     this.pointDraw.draw(this.point);
+    this.timeDraw.draw();
     this.jumpStatus.draw(this.pilot.jumpStatus());
     this.badFloors.forEach((badFloor) => badFloor.draw());
     this.platforms.forEach((platform) => platform.draw());
@@ -192,8 +201,25 @@ class Game {
   points() {
     this.point += 1;
     this.coins = this.coins.filter((coin) => coin.isVisiblePoint());
+    this.audioCoin.play()
     if (this.point > 5) {
       this.madeSpeedUp();
     }
+  }
+  gameOver() {
+    // this.gameOverAudio.play();
+    this.stop();
+    this.ctx.font = "40px Comic Sans MS";
+    this.ctx.textAlign = "center";
+    this.ctx.fillText(
+      "GAME OVER",
+      this.ctx.canvas.width / 2,
+      this.ctx.canvas.height / 2
+    );
+    // this.ctx.fillText(
+    //   "RESET",
+    //   this.ctx.canvas.width / 2,
+    //   this.ctx.canvas.height / 2
+    // );
   }
 }

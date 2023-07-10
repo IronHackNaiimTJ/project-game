@@ -3,7 +3,7 @@ class Point {
         this.ctx = ctx;
         this.x = x;
         this.y = y;
-        this.color = 'white';
+        this.color = 'black';
         this.size = "26px";
       }
     

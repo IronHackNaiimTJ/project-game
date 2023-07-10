@@ -32,6 +32,7 @@ class Platform {
     };
     this.tickImage = 0;
     this.animationTick = 0;
+
   }
 
   draw() {
