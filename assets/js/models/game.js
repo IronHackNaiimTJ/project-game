@@ -20,6 +20,7 @@ class Game {
     this.point = 0;
     this.audio = new Audio("/assets/audio/motor1.mp3");
     this.audioCoin = new Audio("/assets/audio/coin.mp3");
+    this.audioGameOver = new Audio("/assets/audio/gameover.mp3");
     this.tickPlatform = 0;
     this.tickBadFloor = 0;
     this.life = new Life(this.ctx);
@@ -201,13 +202,15 @@ class Game {
   points() {
     this.point += 1;
     this.coins = this.coins.filter((coin) => coin.isVisiblePoint());
-    this.audioCoin.play()
+    this.audioCoin.play();
     if (this.point > 5) {
       this.madeSpeedUp();
     }
   }
+
   gameOver() {
-    // this.gameOverAudio.play();
+    this.audioGameOver.play();
+    this.audio.pause();
     this.stop();
     this.ctx.font = "40px Comic Sans MS";
     this.ctx.textAlign = "center";
@@ -216,10 +219,5 @@ class Game {
       this.ctx.canvas.width / 2,
       this.ctx.canvas.height / 2
     );
-    // this.ctx.fillText(
-    //   "RESET",
-    //   this.ctx.canvas.width / 2,
-    //   this.ctx.canvas.height / 2
-    // );
   }
 }

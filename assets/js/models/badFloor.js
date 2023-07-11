@@ -2,17 +2,12 @@ class BadFloor {
   constructor(ctx, x, y) {
     this.ctx = ctx;
 
-    this.y0 = y;
-    this.x0 = x;
-
     this.x = this.ctx.canvas.width;
     this.y = y;
     this.w = 65;
     this.h = 20;
 
     this.vx = BACKGROUND_SPEED;
-    this.vy = 0;
-    this.ay = PLATFORM_AY;
 
     this.sprite = new Image();
     this.sprite.src = "/assets/img/badFloor.png";

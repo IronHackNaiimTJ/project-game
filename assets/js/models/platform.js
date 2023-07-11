@@ -2,17 +2,12 @@ class Platform {
   constructor(ctx, x, y) {
     this.ctx = ctx;
 
-    this.y0 = y;
-    this.x0 = x;
-
     this.x = this.ctx.canvas.width;
     this.y = y;
     this.w = Math.floor(130 / 2);
     this.h = Math.floor(330 / 2);
 
     this.vx = BACKGROUND_SPEED;
-    this.vy = 0;
-    this.ay = PLATFORM_AY;
 
     this.sprite = new Image();
     this.sprite.src = "/assets/img/platforms/platform1.png";

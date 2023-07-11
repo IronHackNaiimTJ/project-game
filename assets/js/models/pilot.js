@@ -83,7 +83,7 @@ class Pilot {
     this.audioPlatform = new Audio("/assets/audio/platform.mp3");
     this.audioPlatform.volume = 0.5;
     this.audioMotorStart = new Audio("/assets/audio/motor1.mp3");
-    this.audioMotorStart.volume = 0.1;    
+    this.audioMotorStart.volume = 0.1;
     this.audioMotorRun = new Audio("/assets/audio/motorRun.mp3");
     this.audioMotorRun.volume = 0.1;
   }
@@ -142,7 +142,7 @@ class Pilot {
     // ! The pilot can move
     if (!this.pilotStar) {
       // this.audioMotorStart.pause()
-      this.audioMotorRun.play()
+      this.audioMotorRun.play();
       this.vy += this.ay;
       this.x += this.vx;
       this.y += this.vy;
@@ -261,7 +261,6 @@ class Pilot {
     this.vy = -PILOT_JUMP;
     this.vx = 1;
     this.isJump = true;
-    // this.jumpSound.play()
   }
 
   jumpStatus() {

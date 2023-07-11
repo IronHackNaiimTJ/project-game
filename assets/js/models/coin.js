@@ -2,16 +2,12 @@ class Coin {
   constructor(ctx, x, y) {
     this.ctx = ctx;
 
-    this.y0 = y;
-    this.x0 = x;
-
     this.x = this.ctx.canvas.width;
     this.y = y;
     this.w = 60;
     this.h = 60;
 
     this.vx = BACKGROUND_SPEED;
-    this.vy = 0;
 
     this.sprite = new Image();
     this.sprite.src = "/assets/img/coins.png";
