@@ -77,11 +77,11 @@ class Pilot {
     this.animationTick = 0;
 
     this.audioStart = new Audio("/assets/audio/star.mp3");
-    this.audioStart.volume = 0.5;
+    this.audioStart.volume = 0.2;
     this.audioMud = new Audio("/assets/audio/mud.mp3");
-    this.audioMud.volume = 0.5;
+    this.audioMud.volume = 0.2;
     this.audioPlatform = new Audio("/assets/audio/platform.mp3");
-    this.audioPlatform.volume = 0.5;
+    this.audioPlatform.volume = 0.2;
     this.audioMotorStart = new Audio("/assets/audio/motor1.mp3");
     this.audioMotorStart.volume = 0.1;
     this.audioMotorRun = new Audio("/assets/audio/motorRun.mp3");
@@ -269,22 +269,21 @@ class Pilot {
 
   slow(num) {
     this.vx = -num;
-    // this.badFloorSound.play()
   }
 
   slowing() {
     this.isSlow = true;
   }
 
-  colideWith(element, smallElement) {
-    if (smallElement) {
+  colideWith(element, isBadFloor) {
+    if (isBadFloor) {
       if (
         this.x + this.w > element.x &&
         this.x < element.x + element.w &&
         this.y + this.h > element.y &&
         this.y < element.y + element.h
       ) {
-        if (element.y0 < 240) {
+        if (element.y < 240) {
           this.isPilotMud = this.y0 < 185;
           return this.y0 < 185;
         } else {
@@ -292,7 +291,7 @@ class Pilot {
           return true;
         }
       }
-    } else if (!smallElement) {
+    } else if (!isBadFloor) {
       return (
         this.x + this.w > element.x &&
         this.x < element.x + element.w &&

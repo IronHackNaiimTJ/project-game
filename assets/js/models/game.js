@@ -27,8 +27,8 @@ class Game {
     this.lifes = [this.life, this.life, this.life];
     this.lifesDeleted = false;
     this.tickCoin = 0;
-    this.audio.volume = 0.5;
-    this.audioCoin.volume = 0.5;
+    this.audio.volume = 0.2;
+    this.audioCoin.volume = 0.2;
   }
 
   madeSpeedUp() {
@@ -180,6 +180,7 @@ class Game {
   move() {
     this.backgoundStart.move();
     this.pilot.starRace();
+    this.timeDraw.starRace();
     this.pilot.move();
     this.badFloors.forEach((badFloor) => badFloor.move());
     this.platforms.forEach((platform) => platform.move());
@@ -197,6 +198,7 @@ class Game {
     this.platforms.forEach((platform) => platform.draw());
     this.coins.forEach((coin) => coin.draw());
     this.pilot.draw();
+    
   }
 
   points() {
