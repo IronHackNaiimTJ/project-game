@@ -5,13 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ExciteBike Brum Brum</title>
     <link rel="stylesheet" href="/assets/css/main.css" />
-    <link rel="shortcut icon" href="/assets/img/logo.png">
+    <link rel="shortcut icon" href="/assets/img/logo.png" />
   </head>
   <body>
     <div>
       <canvas id="main-canvas" width="600" height="450"> </canvas>
-    <button id="start-btn">START</button>
-
+      <button id="start-btn">START</button>
+      <button id="reset-btn" style="display: none">RESET</button>
+      <div id="instruction">
+        <h1>Instructions:</h1>
+        <ul>
+          <p><img src="/assets/img/keys/Space-key.png"/> Space => JUMP</p>
+          <p><img src="/assets/img/keys/Left-button.png"/> Left => RUN</p>
+          <p><img src="/assets/img/keys/Right-button.png"/> Right => SLOW</p>
+          <p><img src="/assets/img/keys/Up-button.png"/> UP => CHANGE LANES UP</p>
+          <p><img src="/assets/img/keys/Down-button.png"/> DOWN => CHANGE LANES DOWN</p>
+        </ul>
+      </div>
     </div>
     <script src="/assets/js/constans.js"></script>
     <script src="/assets/js/addText.js"></script>
@@ -27,5 +37,6 @@
     <script src="/assets/js/models/pilot.js"></script>
     <script src="/assets/js/models/game.js"></script>
     <script src="/assets/js/index.js"></script>
+    
   </body>
 </html>

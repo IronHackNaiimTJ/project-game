@@ -198,7 +198,6 @@ class Game {
     this.platforms.forEach((platform) => platform.draw());
     this.coins.forEach((coin) => coin.draw());
     this.pilot.draw();
-    
   }
 
   points() {
@@ -212,6 +211,7 @@ class Game {
 
   gameOver() {
     this.audioGameOver.play();
+    this.pilot.audioMotorRun.pause();
     this.audio.pause();
     this.stop();
     this.ctx.font = "40px Comic Sans MS";
@@ -221,5 +221,7 @@ class Game {
       this.ctx.canvas.width / 2,
       this.ctx.canvas.height / 2
     );
+    const startBtn = document.getElementById("reset-btn");
+    startBtn.style.display = "block";
   }
 }

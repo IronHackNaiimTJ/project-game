@@ -9,5 +9,12 @@ startBtn.focus();
 document.getElementById("start-btn").onclick = () => {
   startBtn.remove();
   document.getElementById("main-canvas").style.display = "block";
+  document.getElementById("instruction").style.display = "none";
   game.start();
+};
+
+document.getElementById("reset-btn").onclick = () => {
+  startBtn.remove();
+  document.getElementById("main-canvas").style.display = "block";
+  window.location.reload();
 };

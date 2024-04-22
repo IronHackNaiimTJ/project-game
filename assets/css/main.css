@@ -24,6 +24,29 @@ canvas {
   
 }
 
+#instruction {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  color: white;
+  margin: 4em;
+}
+
+#instruction ul {
+  margin: 0;
+}
+
+#instruction ul p {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
+#instruction ul p img {
+  filter: brightness(0) invert(1);
+}
+
 #start-btn {
   background-color: white; /* Green */
   border: none;
@@ -38,6 +61,25 @@ canvas {
   cursor: pointer;
 }
 #start-btn:hover {
+  background-color: #4CAF50;
+  color: white;
+}
+
+#reset-btn {
+  background-color: white; /* Green */
+  border: none;
+  color: #4CAF50;
+  padding: 16px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  position: absolute;
+}
+#reset-btn:hover {
   background-color: #4CAF50;
   color: white;
 }
