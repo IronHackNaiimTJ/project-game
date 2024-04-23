@@ -16,7 +16,7 @@ Este proyecto es una recreación del legendario juego ExciteBike para la consola
 
 1. **Controles:**
    - Utiliza las flechas direccionales para moverte hacia arriba, abajo, izquierda y derecha para aumentar o disminuir la velocidad.
-   - Presiona la tecla de espacio para saltar los obstáculos.
+   - Presiona la tecla de espacio para saltar los obstáculos (ten en cuenta que no puedes saltar repetidamente).
    - ¡Evita las rampas y ten cuidado con la grava mientras tratas de recolectar todas las monedas que puedas!
 
 2. **Objetivo:**
@@ -25,7 +25,7 @@ Este proyecto es una recreación del legendario juego ExciteBike para la consola
 
 ## Demo
 
-Puedes probar una demostración del juego en vivo [aquí](#).
+Puedes probar una demostración del juego en vivo [aquí](https://excitebike-game-project.netlify.app/).
 
 ---
 
